@@ -1,0 +1,29 @@
+COZINHA NO APP - como gerar o .apk
+
+Esta pasta e o projeto Android completo. O app ja vai dentro e funciona sem internet.
+IMPORTANTE: abra o zip e use o CONTEUDO desta pasta (nao suba a pasta inteira
+dentro de outra pasta).
+
+CAMINHO 1 - Pelo computador, sem instalar nada (GitHub, gratuito)
+1. Crie uma conta em github.com e um repositorio novo.
+2. Envie para a raiz do repositorio TODOS os arquivos e pastas daqui
+   (Add file > Upload files, arrastando o conteudo da pasta).
+3. ATENCAO: a pasta ".github" e escondida em alguns sistemas e pode nao ser enviada.
+   Se nao aparecer no repositorio, crie o arquivo pelo site:
+   Add file > Create new file > no nome digite:  .github/workflows/gerar-apk.yml
+   e cole dentro todo o texto do arquivo gerar-apk.yml.txt (que esta aqui).
+4. Aba "Actions": espere o "Gerar APK" ficar verde (uns 5 minutos).
+   Se nao comecar sozinho: clique em "Gerar APK" > "Run workflow".
+5. Clique na execucao, role ate "Artifacts" e baixe "cozinha-no-app-apk".
+   Isso baixa um ZIP. Descompacte: dentro esta o arquivo app-debug.apk.
+
+CAMINHO 2 - Pelo computador, com Android Studio (gratuito)
+1. Instale o Android Studio: developer.android.com/studio
+2. Open > escolha esta pasta. Aceite se pedir para atualizar o Gradle.
+3. Espere o Gradle terminar (precisa de internet na primeira vez).
+4. Build > Build APK(s) > "locate". O arquivo fica em
+   app/build/outputs/apk/debug/app-debug.apk
+
+PARA INSTALAR NO CELULAR
+Instale o app-debug.apk (nao o zip). Se o Android bloquear, permita a instalacao
+de fontes desconhecidas. O app aparece na lista de apps com o nome "Cozinha no App".

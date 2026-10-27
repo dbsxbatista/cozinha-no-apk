@@ -1,0 +1,383 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Cozinha no App</title>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@700;800&family=Figtree:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#FFFFFF;--card:#FFFFFF;--ink:#111111;--mute:#6B6670;--line:#EADFE5;--acc:#FF4D94;--acc-t:#C2185B;--on-acc:#111111;--chip:#F5EFF2;--bad:#D6381E;--tile:#FFE6F0;--tile-line:#F8C3D8;color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*,*::before,*::after{box-sizing:inherit}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.5 "Figtree",system-ui,sans-serif;overflow-wrap:anywhere}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);background:var(--bg);z-index:10}
+button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:pointer}
+button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible,a:focus-visible{outline:3px solid var(--acc);outline-offset:2px}
+h1,h2,h3,.wm b,.info b,.sheet .st{font-family:"Bricolage Grotesque",system-ui,sans-serif;margin:0;letter-spacing:-.02em}
+#app{max-width:480px;margin:0 auto;padding:0 16px 96px}
+.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:9;background:var(--bg);padding:16px 0 10px;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px}
+h1{font-size:34px;font-weight:800;line-height:1.1}
+.brand{display:flex;align-items:center;gap:12px}
+.mark{width:52px;height:auto;flex:none}
+.wm{display:flex;flex-direction:column;line-height:1.05}
+.wm span{font-size:15px;font-weight:500;color:var(--mute)}
+.wm b{font-size:27px;font-weight:800;line-height:1.02}
+.wm i{font-style:normal;color:var(--acc)}
+#q{width:100%;font:inherit;padding:12px 16px;border-radius:14px;border:1.5px solid var(--line);background:var(--card);color:var(--ink)}
+.chips{display:flex;flex-wrap:wrap;gap:8px;padding:4px 0 12px}
+.chip{flex:none;padding:8px 14px;border-radius:99px;background:var(--chip);font-weight:500;font-size:14px}
+.chip.on{background:var(--acc);color:var(--on-acc);font-weight:700}
+.hint{color:var(--mute);font-size:13px;margin:0 0 12px}
+.sec{font-size:20px;margin:22px 0 10px}
+.sec small{color:var(--mute);font-weight:500;font-size:14px}
+.lbl{margin:6px 0 0;font-size:13px;font-weight:700;color:var(--mute)}
+.card{-webkit-touch-callout:none;-webkit-user-select:none;user-select:none;display:flex;align-items:center;background:var(--card);border:1px solid var(--line);border-radius:18px;margin-bottom:10px;overflow:hidden}
+.main{flex:1;display:flex;align-items:center;gap:14px;padding:10px;text-align:left;min-width:0;-webkit-touch-callout:none}
+.tile{flex:none;display:grid;place-items:center;width:64px;height:64px;border-radius:14px;font-size:32px;background:var(--tile);border:1px solid var(--tile-line);overflow:hidden}
+.tile.big{width:100%;height:180px;font-size:76px;border-radius:24px}
+.tile img{width:100%;height:100%;object-fit:cover;display:block}
+.form .vh{position:absolute;width:1px;height:1px;padding:0;border:0;opacity:0;overflow:hidden}
+.form .filebtn{display:block;font-size:16px;text-align:center;cursor:pointer}
+.phrow{display:grid;gap:10px}
+.info{display:flex;flex-direction:column;min-width:0}
+.info b{font-size:18px;line-height:1.2}
+.info small{color:var(--mute);font-size:14px}
+.heart{width:52px;align-self:stretch;font-size:24px;color:var(--mute)}
+.heart.on{color:var(--acc)}
+.top .heart{width:44px;height:44px;align-self:auto}
+.back{font-weight:700;padding:10px 0}
+.empty{color:var(--mute);text-align:center;padding:40px 12px}
+h2{font-size:30px;font-weight:800;margin:16px 0 10px;line-height:1.1}
+.tags{display:flex;gap:8px;flex-wrap:wrap}
+.tag{background:var(--chip);border-radius:99px;padding:4px 12px;font-size:14px}
+h3{font-size:22px;font-weight:700;margin:24px 0 10px}
+.yield{font-weight:700;margin:2px 0 0;color:var(--acc-t)}
+.seg{display:flex;gap:6px;margin:0 0 6px}
+.seg button{flex:1;padding:9px 6px;border-radius:99px;background:var(--chip);font-weight:700;font-size:14px}
+.seg button.on{background:var(--acc);color:var(--on-acc)}
+.note{color:var(--mute);font-size:14px;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:10px 12px;margin:10px 0 0}
+.chk{display:flex;gap:12px;align-items:flex-start;padding:11px 0;border-bottom:1px solid var(--line)}
+.chk input{width:22px;height:22px;accent-color:var(--acc);flex:none;margin:1px 0 0}
+.chk.done span{text-decoration:line-through;color:var(--mute)}
+.chk span,.steps li span{min-width:0}
+.steps{padding:0;margin:0;list-style:none;counter-reset:s}
+.steps li{counter-increment:s;display:flex;gap:14px;padding:12px 0}
+.steps li::before{content:counter(s);flex:none;width:28px;height:28px;border-radius:50%;background:var(--acc);color:var(--on-acc);font-weight:700;display:grid;place-items:center;font-size:14px}
+.src{color:var(--mute);font-size:14px;margin-top:20px}
+.src a{color:var(--acc)}
+.acts{display:grid;gap:10px;margin-top:28px}
+.danger,.ghost{display:block;width:100%;padding:12px;border-radius:14px;font-weight:700}
+.danger{border:1.5px solid var(--bad);color:var(--bad)}
+.ghost{border:1.5px solid var(--line)}
+.form{display:grid;gap:14px;padding-top:6px}
+.form label{display:grid;gap:6px;font-weight:700;font-size:14px}
+.form small{font-weight:400;color:var(--mute)}
+.form input,.form select,.form textarea{font:inherit;font-weight:400;padding:12px 14px;border-radius:12px;border:1.5px solid var(--line);background:var(--card);color:var(--ink);width:100%}
+.form .ck{display:flex;gap:10px;align-items:center;font-weight:500}
+.form .ck input{width:22px;height:22px;padding:0;flex:none;accent-color:var(--acc)}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.row>*,.form input{min-width:0}
+.primary{background:var(--acc);color:var(--on-acc);padding:14px;border-radius:14px;font-weight:700;font-size:16px}
+.err{color:var(--bad);margin:0;min-height:1.4em;font-size:14px}
+.tabs{position:fixed;left:0;right:0;bottom:0;z-index:9;display:flex;justify-content:center;gap:6px;padding:8px 12px calc(8px + env(safe-area-inset-bottom,0px));background:var(--bg);border-top:1px solid var(--line)}
+.tabs button{flex:1;max-width:150px;padding:11px 0;border-radius:99px;font-weight:700;color:var(--mute)}
+.tabs button.on{background:var(--acc);color:var(--on-acc)}
+.ov{position:fixed;inset:0;z-index:20;background:rgba(0,0,0,.65);display:flex;align-items:flex-end;justify-content:center}
+.sheet{width:100%;max-width:480px;background:var(--card);border:1px solid var(--line);border-radius:22px 22px 0 0;padding:16px 16px calc(16px + env(safe-area-inset-bottom,0px));display:grid;gap:8px}
+.sheet .st{font-weight:700;font-size:20px;line-height:1.2;margin-bottom:6px}
+.sheet button{padding:14px;border-radius:14px;background:var(--chip);font-weight:700;text-align:center}
+.sheet .bad{color:var(--bad)}
+.toast{position:fixed;left:12px;right:12px;bottom:calc(76px + env(safe-area-inset-bottom,0px));max-width:456px;margin:0 auto;z-index:15;display:flex;align-items:center;justify-content:space-between;gap:12px;background:var(--ink);color:var(--bg);padding:12px 16px;border-radius:14px;font-weight:500}
+.toast[hidden]{display:none}
+.toast button{font-weight:700;color:var(--acc)}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
+</style>
+</head>
+<body>
+<main id="app"></main>
+<div id="toast" class="toast" role="status" hidden></div>
+<nav class="tabs" aria-label="Seções">
+<button data-tab="home">Receitas</button><button data-tab="fav">Favoritas</button><button data-tab="new">Nova</button>
+</nav>
+<script>
+const CATS=['Pães','Comidas','Doces','Bebidas'];
+const EM={'Pães':'🍞','Comidas':'🍲','Doces':'🍰','Bebidas':'🥤'};
+const OLD={'Café da manhã':'Comidas','Almoço':'Comidas','Lanche':'Pães','Sobremesa':'Doces'};
+const TM={.5:.75,1:1,2:1.3};
+const MUG=.125;
+const DIETS=[['veg','Vegetarianas'],['vegan','Veganas'],['zero','Zero açúcar'],['carne','Com carnes']];
+const DL={carne:'Com carnes',veg:'Vegetariana',vegan:'Vegana',zero:'Zero açúcar'};
+const R=(id,t,c,e,m,s,su,d,i,p,x)=>({id,t,c,e,m,s,su,d,i,p,...x});
+const FS=[[1,'Receita toda'],[.5,'Meia receita'],[2,'Receita dupla']];
+const GEN=['Misture todos os ingredientes em uma caneca grande (uns 300 ml) até ficar homogêneo.','Leve ao micro-ondas por cerca de 1 minuto e meio. Se o centro ainda estiver cru, volte por mais 20 segundos.','Espere amornar um pouco antes de comer.'];
+const BRAND=`<div class="brand"><svg class="mark" viewBox="0 0 100 110" role="img" aria-label="Logo Cozinha no App"><defs><linearGradient id="lgk" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#4A4A4A"/><stop offset="1" stop-color="#0B0B0B"/></linearGradient><linearGradient id="lgp" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FF8DBB"/><stop offset="1" stop-color="#E0287A"/></linearGradient><linearGradient id="lgw" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#FFFFFF"/><stop offset="1" stop-color="#D6D6D6"/></linearGradient><filter id="lgs" x="-25%" y="-25%" width="150%" height="160%"><feDropShadow dx="0" dy="3" stdDeviation="2.5" flood-color="#000" flood-opacity=".4"/></filter><filter id="lgb"><feGaussianBlur stdDeviation="2.5"/></filter></defs><ellipse cx="50" cy="106" rx="26" ry="3.5" fill="#000" opacity=".28" filter="url(#lgb)"/><g filter="url(#lgs)"><rect x="24" y="4" width="52" height="96" rx="13" fill="url(#lgk)"/></g><rect x="24.8" y="4.8" width="50.4" height="94.4" rx="12.4" fill="none" stroke="#fff" stroke-opacity=".2"/><rect x="29" y="11" width="42" height="82" rx="9" fill="url(#lgp)"/><rect x="42" y="14" width="16" height="3.4" rx="1.7" fill="#0B0B0B" opacity=".5"/><path d="M43 41c-3.5-4.5 3.5-7.5 0-12M57 41c-3.5-4.5 3.5-7.5 0-12" stroke="#fff" stroke-width="2.4" stroke-linecap="round" fill="none"/><g filter="url(#lgs)"><rect x="34" y="47" width="32" height="6" rx="3" fill="url(#lgw)"/><path d="M36 54h28v10a10 10 0 0 1-10 10H46a10 10 0 0 1-10-10z" fill="url(#lgw)"/><path d="M36 59h-5M64 59h5" stroke="#fff" stroke-width="4" stroke-linecap="round"/></g></svg><div class="wm"><b>Cozinha</b><b>no App</b></div></div>`;
+const BASE=[
+R('rv01','Morango do amor','Doces','🍓',40,15,'unidades','veg',['400 g de morango','200 g de leite condensado','15 g de manteiga','300 g de açúcar','150 g de água','1 g de corante alimentício vermelho'],['Lave e seque muito bem os morangos, porque a água estraga a calda.','Cozinhe o leite condensado com a manteiga, mexendo, até virar um brigadeiro cremoso. Deixe esfriar e recheie os morangos.','Leve o açúcar, a água e o corante ao fogo médio, sem mexer, até a calda endurecer ao pingar em água gelada.','Espete os morangos em palitos, mergulhe rápido na calda quente, gire e deixe secar sobre papel manteiga untado.']),
+R('rv02','Pudim de leite condensado','Doces','🍮',80,10,'fatias','veg',['395 g de leite condensado','400 g de leite','3 ovos','150 g de açúcar','50 g de água'],['Derreta o açúcar em fogo médio até dourar, junte a água com cuidado e espalhe a calda na forma.','Bata no liquidificador o leite condensado, o leite e os ovos.','Despeje na forma, cubra com papel-alumínio e asse em banho-maria a 180 °C por 50 minutos.','Espere esfriar e leve à geladeira por pelo menos 4 horas antes de desenformar.']),
+R('rv03','Brigadeirão','Doces','🍫',70,10,'fatias','veg',['395 g de leite condensado','400 g de leite','3 ovos','40 g de chocolate em pó','15 g de manteiga','150 g de açúcar'],['Faça o caramelo com o açúcar e espalhe na forma de pudim.','Bata no liquidificador o leite condensado, o leite, os ovos, o chocolate e a manteiga.','Asse em banho-maria a 180 °C por 50 minutos.','Deixe esfriar e gele por 4 horas antes de desenformar.']),
+R('rv04','Brownie de chocolate','Doces','🍫',40,12,'unidades','veg',['200 g de chocolate meio amargo','150 g de manteiga','200 g de açúcar','3 ovos','100 g de farinha de trigo','30 g de cacau em pó'],['Derreta o chocolate com a manteiga e deixe amornar.','Misture o açúcar e os ovos e junte ao chocolate.','Acrescente a farinha e o cacau.','Asse em forma untada a 180 °C por 25 minutos. O centro deve ficar úmido.']),
+R('rv05','Bolo de cenoura com cobertura de chocolate','Doces','🥕',60,10,'fatias','veg',['300 g de cenoura','3 ovos','110 g de óleo','360 g de açúcar','300 g de farinha de trigo','12 g de fermento em pó','200 g de chocolate meio amargo','100 g de creme de leite'],['Bata no liquidificador a cenoura, os ovos e o óleo.','Misture com o açúcar e a farinha e, por último, o fermento.','Asse em forma untada a 180 °C por 40 minutos.','Derreta o chocolate com o creme de leite, espalhe sobre o bolo morno e deixe firmar.'],{mug:{}}),
+R('rv06','Cheesecake japonês','Doces','🍰',125,8,'fatias','veg',['250 g de cream cheese','100 g de leite','4 ovos','80 g de açúcar','40 g de amido de milho','20 g de manteiga','10 g de suco de limão'],['Derreta o cream cheese com o leite e a manteiga em banho-maria e deixe amornar.','Misture as gemas, o amido e o suco de limão.','Bata as claras com o açúcar até picos moles e incorpore com cuidado.','Asse em banho-maria a 160 °C por 60 minutos e deixe esfriar dentro do forno desligado.']),
+R('rv07','Mousse de maracujá','Doces','🍨',20,8,'porções','veg',['395 g de leite condensado','200 g de creme de leite','150 g de polpa de maracujá'],['Bata tudo no liquidificador por 1 minuto.','Distribua em taças ou em um refratário.','Leve à geladeira por pelo menos 3 horas e sirva gelada.']),
+R('rv08','Bolo de laranja de liquidificador','Doces','🍊',55,10,'fatias','veg',['1 laranja grande com casca','3 ovos','100 g de óleo','250 g de açúcar','280 g de farinha de trigo','12 g de fermento em pó'],['Bata no liquidificador a laranja cortada com a casca, os ovos, o óleo e o açúcar.','Misture com a farinha e, por último, o fermento.','Asse em forma untada a 180 °C por 40 minutos.'],{mug:{}}),
+R('rv09','Macarrão de forno com feta','Comidas','🍝',40,3,'porções','veg',['200 g de queijo feta','300 g de tomate-cereja','30 g de azeite','250 g de macarrão penne','2 dentes de alho','10 g de manjericão'],['Coloque o feta no centro de uma travessa, cerque com os tomates e o alho e regue com o azeite.','Asse a 200 °C por 30 minutos, até o queijo dourar e os tomates estourarem.','Cozinhe o macarrão enquanto isso.','Amasse tudo com um garfo até virar molho cremoso, misture o macarrão e finalize com manjericão.']),
+R('rv10','Chips de macarrão na air fryer','Comidas','🍝',25,2,'porções','veg',['150 g de macarrão penne cozido','15 g de azeite','10 g de queijo parmesão ralado','2 g de orégano seco','2 g de sal'],['Misture o macarrão cozido e escorrido com o azeite, o parmesão, o orégano e o sal.','Espalhe em uma única camada na air fryer.','Asse a 200 °C por 10 a 12 minutos, mexendo na metade, até ficar crocante.','Sirva com molho de tomate ou iogurte.']),
+R('rv11','Ovos com pesto','Comidas','🍳',10,1,'porções','veg',['2 ovos','15 g de pesto de manjericão','5 g de azeite','1 pitada de sal'],['Aqueça o azeite com o pesto em fogo médio por 30 segundos.','Quebre os ovos por cima e tampe.','Cozinhe por 3 a 4 minutos, até a clara firmar, e sirva com pão.']),
+R('rv12','Macarrão com queijo cremoso','Comidas','🧀',30,4,'porções','veg',['300 g de macarrão cotovelo','40 g de manteiga','30 g de farinha de trigo','500 g de leite','200 g de queijo cheddar ralado','5 g de sal'],['Cozinhe o macarrão e escorra.','Derreta a manteiga, junte a farinha e mexa por 1 minuto. Acrescente o leite aos poucos até engrossar.','Desligue o fogo e misture o queijo e o sal.','Misture o macarrão ao molho e sirva.']),
+R('rv13','Salada de macarrão crocante','Comidas','🥗',30,6,'porções','veg',['250 g de macarrão parafuso cozido','100 g de maionese','100 g de milho cozido','100 g de ervilha cozida','100 g de cenoura ralada','40 g de batata palha','10 g de cebolinha'],['Misture o macarrão frio com a maionese, o milho, a ervilha, a cenoura e a cebolinha.','Leve à geladeira por 30 minutos.','Na hora de servir, cubra com a batata palha para manter a crocância.']),
+R('rv14','Cebola empanada em flor','Comidas','🧅',45,4,'porções','veg',['1 cebola grande','100 g de farinha de trigo','2 ovos','100 g de farinha de rosca','5 g de sal','300 g de óleo para fritar'],['Descasque a cebola e faça cortes fundos a partir do topo, sem separar a base. Abra as pétalas.','Passe na farinha de trigo, nos ovos batidos e na farinha de rosca, cobrindo entre as pétalas. Repita o ovo e a farinha de rosca para uma casquinha mais grossa.','Frite em óleo quente por 5 a 7 minutos, até dourar, e escorra.']),
+R('rv15','Torta de brócolis e cenoura sem massa','Comidas','🥧',45,6,'fatias','veg',['300 g de brócolis cozido','150 g de cenoura ralada','4 ovos','200 g de leite','60 g de farinha de trigo','100 g de queijo muçarela ralado','8 g de fermento em pó','4 g de sal'],['Bata os ovos, o leite, a farinha e o sal no liquidificador.','Misture o brócolis picado, a cenoura e o queijo e, por último, o fermento.','Despeje em forma untada e asse a 180 °C por 35 minutos.']),
+R('rv16','Pimentão recheado com cream cheese','Comidas','🌶️',25,4,'porções','veg',['4 pimentões pequenos','200 g de cream cheese','10 g de cebolinha','30 g de salgadinho de milho','2 g de sal'],['Corte o topo dos pimentões e retire as sementes.','Misture o cream cheese com a cebolinha e o sal e recheie bem os pimentões.','Leve à geladeira por 20 minutos, corte em rodelas e sirva com o salgadinho esfarelado por cima.']),
+R('rv17','Café dalgona','Bebidas','☕',10,1,'copos','veg',['15 g de café solúvel','15 g de açúcar','15 g de água quente','200 g de leite gelado'],['Bata o café, o açúcar e a água por 3 a 5 minutos, até virar um creme firme.','Coloque o leite gelado no copo e cubra com o creme.']),
+R('rv18','Cappuccino caseiro cremoso','Bebidas','☕',5,2,'xícaras','veg',['10 g de café solúvel','10 g de chocolate em pó','10 g de açúcar','300 g de leite quente'],['Bata o café, o chocolate e o açúcar com um pouco do leite quente até espumar.','Complete com o restante do leite.']),
+R('rv19','Chocolate quente cremoso','Bebidas','🍫',10,2,'xícaras','veg',['500 g de leite','100 g de chocolate meio amargo','20 g de açúcar','10 g de amido de milho'],['Dissolva o amido em um pouco do leite frio.','Aqueça o restante do leite com o açúcar, junte o chocolate picado e mexa até derreter.','Acrescente o amido dissolvido e mexa por 2 a 3 minutos, até engrossar.']),
+R('rv20','Pão nuvem','Pães','☁️',40,4,'unidades','veg',['3 ovos','90 g de cream cheese','15 g de amido de milho','5 g de suco de limão'],['Separe as claras das gemas. Bata as gemas com o cream cheese e o amido até ficar liso.','Bata as claras com o suco de limão até picos firmes.','Incorpore as claras às gemas com delicadeza.','Faça montinhos em assadeira forrada e asse a 150 °C por 25 a 30 minutos.']),
+R('rg01','Uva do amor','Doces','🍇',30,10,'unidades','vegan',['300 g de uva sem sementes','200 g de açúcar','100 g de água','1 g de corante alimentício'],['Lave e seque muito bem as uvas e espete cada uma em um palito.','Leve o açúcar, a água e o corante ao fogo médio, sem mexer, até a calda endurecer ao pingar em água gelada.','Mergulhe as uvas na calda, gire e deixe secar sobre papel manteiga untado.']),
+R('rg02','Salada de pepino viral','Comidas','🥒',10,2,'porções','vegan',['400 g de pepino','30 g de vinagre de arroz','15 g de óleo de gergelim','15 g de molho de soja','1 dente de alho','1 g de pimenta em flocos','5 g de gergelim'],['Esmague os pepinos com o lado da faca e corte em pedaços.','Misture o vinagre, o óleo de gergelim, o molho de soja, o alho ralado e a pimenta.','Junte o pepino, mexa e deixe 15 minutos na geladeira. Sirva com gergelim.']),
+R('rg03','Batata sanfonada','Comidas','🥔',60,4,'porções','vegan',['600 g de batata','30 g de azeite','3 dentes de alho','5 g de sal','2 g de páprica','5 g de alecrim'],['Faça cortes finos e paralelos na batata sem atravessar, apoiando-a entre dois palitos para não cortar até o fim.','Misture o azeite, o alho picado, o sal e a páprica e pincele entre os cortes.','Asse a 200 °C por 45 a 50 minutos, pincelando mais azeite na metade, até dourar e ficar crocante.']),
+R('rg04','Hambúrguer de feijão-preto','Comidas','🍔',30,4,'unidades','vegan',['300 g de feijão-preto cozido','1 cebola pequena','2 dentes de alho','40 g de aveia em flocos','25 g de farinha de rosca','3 g de cominho','15 g de azeite','5 g de sal'],['Amasse o feijão com um garfo, deixando alguns pedaços.','Junte a cebola e o alho picados, a aveia, a farinha de rosca, o cominho e o sal.','Modele os hambúrgueres e leve à geladeira por 10 minutos.','Doure no azeite em fogo médio por 4 minutos de cada lado.']),
+R('rg05','Tacos de grão-de-bico','Comidas','🌮',25,3,'porções','vegan',['300 g de grão-de-bico cozido','8 g de páprica defumada','3 g de cominho','15 g de azeite','6 tortilhas de milho','1 abacate','100 g de tomate','1 limão','10 g de coentro'],['Amasse levemente o grão-de-bico e tempere com a páprica, o cominho e sal.','Doure no azeite em fogo médio-alto por 8 minutos, até ficar crocante.','Aqueça as tortilhas e monte com o grão-de-bico, o abacate amassado com limão, o tomate picado e o coentro.']),
+R('rg06','Macarrão com pesto de couve','Comidas','🌿',25,3,'porções','vegan',['300 g de espaguete','80 g de couve','40 g de castanha-de-caju','1 dente de alho','60 g de azeite','5 g de sal','1 limão'],['Cozinhe o espaguete em água com sal até ficar al dente.','Escalde a couve por 1 minuto, escorra e bata com a castanha, o alho, o azeite, o sal e o suco do limão.','Misture o pesto ao macarrão com um pouco da água do cozimento.']),
+R('rg07','Macarrão com queijo vegano','Comidas','🧀',35,4,'porções','vegan',['300 g de macarrão cotovelo','300 g de batata','100 g de cenoura','60 g de castanha-de-caju','20 g de azeite','15 g de levedura nutricional','5 g de sal','200 g de água'],['Cozinhe a batata e a cenoura em pedaços até amolecerem.','Bata com a castanha, o azeite, a levedura, o sal e a água até ficar cremoso.','Cozinhe o macarrão e escorra.','Misture o macarrão ao molho e aqueça por 2 minutos.']),
+R('rg08','Panqueca vegana de banana e aveia','Comidas','🥞',15,2,'porções','vegan',['2 bananas maduras','80 g de aveia em flocos','120 g de leite vegetal','6 g de fermento em pó','3 g de canela em pó','5 g de óleo para untar'],['Amasse as bananas e misture com a aveia, o leite vegetal, a canela e o fermento.','Deixe a massa descansar por 5 minutos.','Unte uma frigideira antiaderente e doure porções da massa por 2 minutos de cada lado.']),
+R('rg09','Cookies veganos de banana e aveia','Doces','🍪',25,12,'unidades','vegan',['3 bananas maduras','160 g de aveia em flocos','50 g de gotas de chocolate meio amargo','3 g de canela em pó'],['Amasse as bananas e misture com a aveia, a canela e as gotas de chocolate.','Modele bolinhas achatadas em uma assadeira forrada.','Asse a 180 °C por 15 minutos, até dourar de leve.']),
+R('rg10','Sorvete de banana com cacau','Doces','🍌',10,2,'porções','vegan',['3 bananas congeladas','20 g de cacau em pó','30 g de leite vegetal'],['Corte as bananas congeladas em rodelas.','Bata no processador com o cacau e o leite vegetal até ficar cremoso.','Sirva na hora ou leve ao freezer por 20 minutos para firmar.']),
+R('rg11','Smoothie vegano de morango e banana','Bebidas','🍓',5,1,'copos','vegan',['1 banana congelada','150 g de morango congelado','200 g de leite vegetal','15 g de aveia em flocos'],['Bata tudo no liquidificador até ficar cremoso.','Sirva na hora.']),
+R('rg12','Bolo de chocolate vegano','Doces','🍫',50,10,'fatias','vegan',['240 g de farinha de trigo','180 g de açúcar','50 g de cacau em pó','12 g de fermento em pó','240 g de leite vegetal','90 g de óleo','10 g de vinagre','2 g de sal'],['Misture em uma tigela a farinha, o açúcar, o cacau, o sal e o fermento.','Acrescente o leite vegetal, o óleo e o vinagre e mexa até a massa ficar lisa.','Despeje em forma untada.','Asse a 180 °C por 35 minutos e confira com um palito.'],{mug:{}}),
+R('rg13','Sopa cremosa de abóbora','Comidas','🎃',35,4,'porções','vegan',['600 g de abóbora cabotiá','1 cebola','2 dentes de alho','700 g de água','200 g de leite de coco','20 g de azeite','5 g de sal'],['Refogue a cebola e o alho no azeite.','Junte a abóbora em cubos, a água e o sal e cozinhe por 20 minutos, até amolecer.','Bata no liquidificador com o leite de coco até ficar cremoso e aqueça de novo antes de servir.']),
+R('rg14','Frango vegano de seitan','Comidas','🍗',70,4,'porções','vegan',['150 g de glúten de trigo vital','100 g de caldo de legumes','30 g de molho de soja','15 g de levedura nutricional','3 g de alho em pó','3 g de páprica','15 g de azeite','600 g de caldo de legumes para cozinhar'],['Misture o glúten, a levedura, o alho em pó e a páprica.','Junte o caldo, o molho de soja e o azeite e amasse até formar uma massa elástica.','Divida em pedaços e cozinhe no caldo restante, em fogo baixo, por 45 minutos.','Deixe esfriar no caldo e sirva grelhado, empanado ou desfiado.']),
+R('rg15','Queijo vegano de castanha-de-caju','Comidas','🧀',20,6,'porções','vegan',['150 g de castanha-de-caju','100 g de água','20 g de suco de limão','15 g de levedura nutricional','1 dente de alho','3 g de sal'],['Deixe a castanha de molho em água quente por 30 minutos e escorra.','Bata com a água, o limão, a levedura, o alho e o sal até ficar bem liso.','Leve à geladeira por 2 horas para firmar e sirva com pão ou legumes.']),
+R('rg16','Leite de aveia caseiro','Bebidas','🥛',10,4,'copos','vegan',['100 g de aveia em flocos','800 g de água gelada','1 g de sal'],['Bata a aveia, a água gelada e o sal por 30 segundos, sem exagerar para não ficar viscoso.','Coe em pano limpo ou filtro de café.','Guarde na geladeira por até 4 dias.']),
+R('rg17','Chocolate quente vegano','Bebidas','🍫',10,2,'xícaras','vegan',['500 g de leite de aveia','100 g de chocolate meio amargo sem leite','20 g de açúcar','10 g de amido de milho'],['Dissolva o amido em um pouco do leite frio.','Aqueça o restante do leite com o açúcar, junte o chocolate picado e mexa até derreter.','Acrescente o amido dissolvido e mexa por 2 a 3 minutos, até engrossar.']),
+R('rg18','Pão caseiro simples','Pães','🍞',120,12,'fatias','vegan',['500 g de farinha de trigo','300 g de água morna','10 g de fermento biológico seco','10 g de açúcar','8 g de sal','20 g de azeite'],['Misture todos os ingredientes e sove por 10 minutos, até a massa ficar lisa.','Deixe crescer por 1 hora, tampada.','Modele, coloque em forma untada e deixe crescer por mais 40 minutos.','Asse a 200 °C por 35 minutos, até dourar.']),
+R('rg19','Pãozinho de frigideira de 2 ingredientes','Pães','🥖',20,4,'unidades','vegan',['200 g de farinha de trigo','120 g de água','2 g de sal'],['Misture a farinha, a água e o sal e sove por 3 minutos, até a massa desgrudar das mãos.','Divida em 4 bolinhas e abra com as mãos.','Doure em frigideira antiaderente tampada, em fogo baixo, por 4 a 5 minutos de cada lado.']),
+R('rz01','Sorvete de cottage cheese','Doces','🍨',10,2,'porções','zero',['300 g de cottage cheese','1 banana congelada','100 g de morango congelado','5 g de essência de baunilha'],['Bata tudo no processador até ficar liso e cremoso.','Sirva na hora ou leve ao freezer por 1 hora para firmar.']),
+R('rz02','Pão de cottage cheese','Pães','🥙',35,2,'unidades','zero',['200 g de cottage cheese','2 ovos','2 g de sal','2 g de orégano seco'],['Bata o cottage com os ovos, o sal e o orégano até ficar liso.','Espalhe em assadeira forrada, formando um disco fino.','Asse a 200 °C por 25 minutos, até dourar, e use como wrap.']),
+R('rz03','Panqueca de cottage cheese','Comidas','🥞',15,2,'porções','zero',['120 g de cottage cheese','2 ovos','40 g de aveia em flocos','3 g de canela em pó','5 g de óleo para untar'],['Bata o cottage, os ovos, a aveia e a canela no liquidificador.','Unte uma frigideira antiaderente e doure porções da massa por 2 minutos de cada lado.']),
+R('rz04','Overnight oats','Comidas','🥣',10,1,'porções','zero',['50 g de aveia em flocos','120 g de iogurte natural','100 g de leite','10 g de chia','100 g de frutas picadas'],['Misture a aveia, o iogurte, o leite e a chia em um pote.','Leve à geladeira por pelo menos 8 horas.','Sirva com as frutas por cima.']),
+R('rz05','Crepioca fit','Pães','🌮',10,1,'porções','zero',['1 ovo','30 g de goma de tapioca','30 g de ricota','1 pitada de sal'],['Bata o ovo com a goma e o sal.','Despeje em frigideira antiaderente e doure dos dois lados.','Recheie com a ricota e dobre.']),
+R('rz06','Panqueca de aveia e banana','Comidas','🥞',15,2,'porções','zero',['1 banana madura','2 ovos','40 g de aveia em flocos','3 g de canela em pó','3 g de óleo para untar'],['Amasse a banana e misture com os ovos, a aveia e a canela.','Unte uma frigideira antiaderente e doure a massa por 2 minutos de cada lado.']),
+R('rz07','Bolo de banana com aveia','Doces','🍌',45,8,'fatias','zero',['3 bananas maduras','3 ovos','120 g de aveia em flocos','50 g de óleo','10 g de fermento em pó','3 g de canela em pó'],['Bata no liquidificador as bananas, os ovos, a aveia e o óleo.','Junte o fermento e a canela e misture.','Asse em forma untada a 180 °C por 35 minutos.'],{mug:{}}),
+R('rz08','Mousse de limão proteica','Doces','🍋',20,4,'porções','zero',['300 g de iogurte desnatado','100 g de suco de limão','30 g de leite em pó desnatado','30 g de whey protein sabor baunilha','5 g de raspas de limão'],['Bata todos os ingredientes no processador até ficar cremoso.','Distribua em copinhos e leve à geladeira por 2 horas.']),
+R('rz09','Beijinho proteico','Doces','🥥',30,15,'unidades','zero',['60 g de leite em pó','40 g de coco ralado sem açúcar','100 g de creme de leite','20 g de coco ralado para enrolar'],['Misture o leite em pó, o coco e o creme de leite até formar uma massa que desgruda das mãos. Se estiver mole, gele por 20 minutos.','Enrole bolinhas e passe no coco ralado.']),
+R('rz10','Barrinha de aveia com banana e morango','Doces','🍓',55,8,'unidades','zero',['2 bananas maduras','120 g de aveia em flocos','40 g de pasta de amendoim','80 g de morango picado','3 g de canela em pó'],['Amasse as bananas e misture com a aveia, a pasta de amendoim e a canela.','Acrescente os morangos picados.','Espalhe em forma forrada e asse a 180 °C por 30 minutos.','Deixe esfriar e corte em barras.']),
+R('rz11','Tabule','Comidas','🥗',30,4,'porções','zero',['100 g de trigo para quibe','200 g de tomate','100 g de pepino','30 g de cebola','30 g de salsinha','15 g de hortelã','40 g de suco de limão','30 g de azeite','3 g de sal'],['Deixe o trigo de molho em água fria por 30 minutos e esprema bem.','Pique o tomate, o pepino, a cebola, a salsinha e a hortelã bem miúdos.','Misture tudo com o limão, o azeite e o sal e deixe 15 minutos na geladeira.']),
+R('rz12','Cheesecake fit de cottage cheese','Doces','🍰',60,8,'fatias','zero',['400 g de cottage cheese','3 ovos','30 g de eritritol','20 g de suco de limão','5 g de essência de baunilha','100 g de morango'],['Bata o cottage, os ovos, o eritritol, o limão e a baunilha até ficar liso.','Despeje em forma untada e asse a 170 °C por 35 minutos.','Deixe esfriar, leve à geladeira por 3 horas e sirva com os morangos.']),
+R('rz13','Café proteico gelado','Bebidas','☕',5,1,'copos','zero',['150 g de café forte frio','150 g de leite desnatado','30 g de whey protein sabor baunilha','100 g de gelo'],['Bata o café, o leite e o whey no liquidificador.','Sirva sobre o gelo.']),
+R('rz14','Shake de whey com banana e aveia','Bebidas','🥤',5,1,'copos','zero',['250 g de leite desnatado','30 g de whey protein sabor baunilha','1 banana','15 g de aveia em flocos','2 g de canela em pó'],['Bata tudo no liquidificador por 1 minuto.','Sirva gelado.']),
+R('rz15','Baked oats de chocolate','Doces','🍫',30,1,'porções','zero',['60 g de aveia em flocos','1 banana madura','1 ovo','100 g de leite','10 g de cacau em pó','3 g de fermento em pó'],['Bata tudo no liquidificador.','Despeje em um ramequim untado.','Asse a 180 °C por 20 a 25 minutos.']),
+R('rz16','Bolo de caneca fit de whey','Doces','🎂',5,1,'porções','zero',['1 ovo','25 g de whey protein sabor chocolate','15 g de aveia em flocos','5 g de cacau em pó','20 g de leite','3 g de fermento em pó'],['Misture tudo em uma caneca grande até ficar homogêneo.','Leve ao micro-ondas por cerca de 1 minuto e meio.','Espere amornar um pouco antes de comer.']),
+R('rz17','Pudim de chia com whey','Doces','🥣',15,2,'porções','zero',['30 g de chia','200 g de leite desnatado','20 g de whey protein sabor baunilha','100 g de frutas picadas'],['Misture a chia, o leite e o whey.','Leve à geladeira por pelo menos 4 horas.','Sirva com as frutas.']),
+R('rz18','Gelatina de frutas sem açúcar','Doces','🍓',20,6,'porções','zero',['12 g de gelatina em pó sem sabor','100 g de água fria','300 g de suco de laranja natural','200 g de frutas picadas'],['Hidrate a gelatina na água fria por 5 minutos e dissolva em banho-maria ou no micro-ondas.','Misture o suco e junte as frutas.','Despeje em taças e leve à geladeira por 4 horas.']),
+R('rz19','Ovos mexidos com cottage cheese','Comidas','🍳',10,1,'porções','zero',['3 ovos','60 g de cottage cheese','5 g de manteiga','1 pitada de sal'],['Bata os ovos com o sal.','Derreta a manteiga em frigideira antiaderente e cozinhe os ovos em fogo baixo, mexendo.','Quando estiverem quase firmes, misture o cottage e desligue o fogo.']),
+R('rz20','Torrada com abacate e cottage cheese','Pães','🥑',10,1,'porções','zero',['2 fatias de pão integral','100 g de cottage cheese','1/2 abacate','5 g de suco de limão','1 g de pimenta-do-reino'],['Torre o pão.','Espalhe o cottage cheese e cubra com o abacate fatiado.','Finalize com o limão e a pimenta.']),
+R('rc01','Frango cremoso com tomate seco','Comidas','🍗',40,4,'porções','carne',['600 g de peito de frango fatiado fino','30 g de farinha de trigo','5 g de páprica','30 g de manteiga','3 dentes de alho','200 g de creme de leite fresco','150 g de caldo de galinha','80 g de tomate seco picado','40 g de queijo parmesão ralado','10 g de manjericão'],['Misture a farinha, a páprica, sal e pimenta e empane o frango.','Doure o frango na manteiga por 4 minutos de cada lado e reserve.','Na mesma panela, refogue o alho e junte o caldo, o creme de leite, o tomate seco e o parmesão.','Volte o frango ao molho, cozinhe por 5 minutos e finalize com manjericão. Sirva com macarrão ou arroz.']),
+R('rc02','Tacos de smash burger','Comidas','🌮',20,4,'unidades','carne',['400 g de carne moída','4 tortilhas de trigo pequenas','100 g de queijo cheddar fatiado','1 cebola pequena','60 g de picles','30 g de maionese','15 g de ketchup','5 g de sal'],['Espalhe a carne temperada com sal em camada fina sobre cada tortilha, pressionando bem.','Coloque na frigideira bem quente com a carne para baixo por 3 minutos, até dourar.','Cubra com o queijo e deixe derreter.','Monte com a cebola picada, o picles e um molho de maionese com ketchup.']),
+R('rc03','Fricassê de frango','Comidas','🍗',50,6,'porções','carne',['500 g de peito de frango cozido e desfiado','200 g de milho cozido','100 g de creme de leite','300 g de leite','30 g de farinha de trigo','30 g de manteiga','1 cebola pequena','150 g de queijo muçarela ralado','40 g de batata palha'],['Refogue a cebola na manteiga, junte a farinha e o leite e mexa até virar um creme grosso.','Acrescente o frango, o milho, o creme de leite e sal.','Despeje em um refratário, cubra com o queijo e leve ao forno a 200 °C por 15 minutos.','Finalize com a batata palha.']),
+R('rc04','Picadinho de carne com queijo','Comidas','🥩',30,4,'porções','carne',['600 g de patinho em cubos pequenos','1 cebola','3 dentes de alho','20 g de óleo','200 g de molho de tomate','150 g de queijo muçarela em cubos','100 g de requeijão','10 g de cebolinha'],['Tempere a carne com sal e pimenta e doure em fogo alto, aos poucos.','Refogue a cebola e o alho, junte o molho de tomate e a carne e cozinhe por 10 minutos.','Cubra com a muçarela e o requeijão, tampe até derreter e finalize com a cebolinha. Sirva com arroz.']),
+R('rc05','Estrogonofe de carne','Comidas','🥩',40,4,'porções','carne',['500 g de patinho em tiras','1 cebola','2 dentes de alho','15 g de manteiga','45 g de ketchup','15 g de mostarda','200 g de champignon fatiado','200 g de creme de leite'],['Tempere a carne com sal e pimenta e doure em fogo alto, aos poucos. Reserve.','Refogue a cebola e o alho na manteiga e junte o champignon.','Volte a carne, adicione o ketchup e a mostarda e cozinhe por 5 minutos.','Desligue o fogo, misture o creme de leite e sirva.']),
+R('rc06','Almôndegas ao molho de tomate','Comidas','🧆',45,4,'porções','carne',['500 g de carne moída','1 ovo','40 g de farinha de rosca','1 cebola pequena','2 dentes de alho','400 g de molho de tomate','5 g de sal','10 g de salsinha picada'],['Rale a cebola e misture com a carne, o ovo, a farinha de rosca, o alho, o sal e a salsinha.','Modele bolinhas do tamanho de uma noz.','Aqueça o molho de tomate em uma panela larga e coloque as bolinhas.','Tampe e cozinhe em fogo baixo por 25 minutos, virando uma vez.']),
+R('rc07','Hambúrguer caseiro','Comidas','🍔',30,4,'unidades','carne',['600 g de carne moída','1 cebola pequena','1 ovo','30 g de farinha de rosca','5 g de sal'],['Rale a cebola e misture com a carne, o ovo, a farinha de rosca e o sal.','Modele os hambúrgueres e leve à geladeira por 15 minutos.','Grelhe em frigideira quente por 4 minutos de cada lado.','Sirva no pão com salada e queijo.']),
+R('rc08','Rocambole de carne moída','Comidas','🥩',60,6,'fatias','carne',['500 g de carne moída','1 ovo','30 g de farinha de rosca','1 cebola pequena','150 g de presunto fatiado','150 g de queijo muçarela fatiado','200 g de molho de tomate','5 g de sal'],['Misture a carne, o ovo, a farinha de rosca, a cebola ralada e o sal.','Abra a massa sobre plástico em um retângulo, cubra com o presunto e o queijo e enrole.','Coloque em uma forma, cubra com o molho de tomate e asse a 200 °C por 40 minutos.']),
+R('rc09','Yakissoba','Comidas','🍜',30,4,'porções','carne',['300 g de macarrão para yakissoba','300 g de carne em tiras','200 g de repolho','1 cenoura','150 g de brócolis','45 g de molho shoyu','20 g de óleo','10 g de amido de milho','2 dentes de alho'],['Cozinhe o macarrão e escorra.','Doure a carne no óleo em fogo alto e reserve.','Salteie o alho, a cenoura, o brócolis e o repolho por 4 minutos. Junte o shoyu e o amido dissolvido em um pouco de água.','Misture o macarrão e a carne e sirva.']),
+R('rc10','Frango empanado crocante','Comidas','🍗',40,4,'porções','carne',['600 g de filé de peito de frango','150 g de iogurte natural','100 g de farinha de trigo','10 g de páprica','5 g de alho em pó','5 g de sal','200 g de óleo para fritar'],['Deixe o frango no iogurte com sal por 30 minutos.','Misture a farinha, a páprica e o alho em pó e empane o frango, apertando bem.','Frite em óleo quente por 5 minutos de cada lado, até dourar e cozinhar por dentro, e escorra.']),
+R('rc11','Frango xadrez','Comidas','🍗',30,4,'porções','carne',['500 g de peito de frango em cubos','1 pimentão','1 cebola','60 g de amendoim torrado','45 g de molho shoyu','10 g de amido de milho','10 g de açúcar','20 g de óleo','2 dentes de alho'],['Misture o frango com metade do shoyu e o amido e doure no óleo em fogo alto.','Junte o alho, a cebola e o pimentão em pedaços e salteie por 4 minutos.','Acrescente o restante do shoyu, o açúcar e o amendoim e mexa por 2 minutos.']),
+R('rc12','Frango ao creme de milho','Comidas','🌽',40,4,'porções','carne',['600 g de peito de frango em cubos','400 g de milho cozido','200 g de leite','200 g de creme de leite','1 cebola','2 dentes de alho','20 g de óleo','100 g de queijo muçarela ralado'],['Doure o frango no óleo com a cebola e o alho.','Bata o milho com o leite no liquidificador e coe, se quiser.','Junte ao frango, cozinhe por 10 minutos e misture o creme de leite.','Cubra com a muçarela e deixe derreter.']),
+R('rc13','Frango assado com batatas e iogurte de alho','Comidas','🍗',70,4,'porções','carne',['800 g de coxa e sobrecoxa de frango','600 g de batata','30 g de azeite','6 g de sal','2 dentes de alho','150 g de iogurte natural','30 g de rúcula','1 limão'],['Tempere o frango e as batatas em pedaços com o azeite e o sal.','Asse em assadeira a 220 °C por 40 minutos, até dourar.','Misture o iogurte com o alho ralado, o suco do limão e uma pitada de sal.','Sirva com a rúcula e o iogurte de alho.']),
+R('rc14','Tigela de salmão com arroz','Comidas','🍣',20,1,'porções','carne',['150 g de salmão cozido','150 g de arroz cozido','15 g de molho de soja','10 g de maionese','5 g de molho de pimenta','30 g de abacate','5 g de gergelim','5 g de alga nori'],['Desfie o salmão sobre o arroz ainda quente e misture.','Regue com o molho de soja, a maionese e o molho de pimenta.','Sirva com o abacate, o gergelim e a alga nori.']),
+R('rc15','Peixe na air fryer','Comidas','🐟',20,2,'porções','carne',['400 g de filé de tilápia','1 limão','2 dentes de alho','10 g de azeite','3 g de páprica','4 g de sal'],['Tempere o peixe com o suco do limão, o alho, o azeite, a páprica e o sal.','Leve à air fryer a 200 °C por 10 a 12 minutos, virando na metade.','Sirva com arroz e salada.']),
+R('rc16','Moqueca de peixe','Comidas','🍲',50,4,'porções','carne',['600 g de filé de peixe firme','2 tomates','1 cebola','1 pimentão','200 g de leite de coco','30 g de azeite','15 g de coentro picado','2 dentes de alho','1 limão','6 g de sal'],['Tempere o peixe com sal, alho e o suco do limão e deixe por 15 minutos.','Em uma panela, monte camadas de cebola, tomate e pimentão em rodelas.','Coloque o peixe, regue com o azeite e o leite de coco.','Cozinhe tampado em fogo baixo por 20 minutos e finalize com o coentro.']),
+R('rc17','Wrap de Big Mac','Comidas','🌯',15,2,'porções','carne',['300 g de carne moída','2 tortilhas grandes','100 g de queijo cheddar','60 g de alface picada','40 g de picles','30 g de cebola','40 g de maionese','20 g de ketchup','10 g de mostarda'],['Doure a carne temperada com sal e escorra.','Misture a maionese, o ketchup e a mostarda para fazer o molho.','Monte as tortilhas com a carne, o queijo, a alface, o picles, a cebola e o molho.','Enrole e doure o wrap na frigideira por 1 minuto de cada lado.']),
+R('rc18','Corn dog','Comidas','🌭',40,6,'unidades','carne',['6 salsichas','120 g de farinha de trigo','100 g de fubá','8 g de fermento em pó','10 g de açúcar','200 g de leite','1 ovo','500 g de óleo para fritar'],['Misture a farinha, o fubá, o fermento e o açúcar e junte o leite e o ovo até ficar uma massa grossa.','Espete as salsichas em palitos e passe em um pouco de farinha.','Mergulhe na massa, cobrindo bem, e frite em óleo quente por 4 minutos, girando, até dourar.']),
+R('rc19','Strogonoff de frango','Comidas','🍛',40,4,'porções','carne',['500 g de peito de frango em cubos','1 cebola média','2 dentes de alho','15 g de manteiga','45 g de ketchup','15 g de mostarda','200 g de champignon fatiado','200 g de creme de leite'],['Tempere o frango com sal e pimenta.','Refogue a cebola e o alho na manteiga e doure o frango por 8 minutos.','Junte o champignon, o ketchup e a mostarda e cozinhe por 5 minutos.','Desligue o fogo, misture o creme de leite e sirva com arroz e batata palha.']),
+R('rc20','Moqueca de camarão','Comidas','🍤',40,4,'porções','carne',['500 g de camarão limpo','1 cebola','2 tomates','1 pimentão','200 g de leite de coco','30 g de azeite','15 g de coentro picado','2 dentes de alho','1 limão','6 g de sal'],['Tempere o camarão com sal, alho e o suco do limão.','Refogue a cebola, o tomate e o pimentão no azeite por 5 minutos.','Junte o leite de coco e cozinhe por 5 minutos.','Acrescente o camarão, cozinhe por 5 minutos e finalize com o coentro.']),
+R('rg20','Salgadinho de espinafre crocante','Comidas','🥬',30,2,'porções','vegan',['4 xícaras de folhas de espinafre','3 colheres de sopa de azeite','1 colher de sopa de cebola ralada','1/2 colher de chá de orégano seco','2 colheres de sopa de levedura nutricional','1/2 xícara de farinha de mandioca biju','1/2 colher de chá de sal'],['Tire os talos do espinafre, lave e seque muito bem as folhas.','Misture as folhas com o azeite, a cebola, o orégano, a levedura, a farinha de mandioca e o sal, massageando para cobrir tudo.','Asse na air fryer a 170 °C por 12 a 15 minutos, metade por vez, abrindo para mexer. No forno, espalhe em camada única e asse a 180 °C por 40 a 45 minutos.']),
+R('rg21','Leite condensado vegano de castanhas','Doces','🥛',40,1,'lata','vegan',['1 xícara de castanha-de-caju crua','1 1/4 xícara de açúcar cristal','1/2 xícara de água','2 colheres de sopa de óleo de coco sem sabor','1/4 colher de chá de sal'],['Deixe a castanha de molho em água quente por 30 minutos e escorra.','Bata no liquidificador a castanha, o açúcar, a água, o óleo de coco e o sal até ficar bem liso, sem grumos.','Se quiser mais espesso, leve ao fogo baixo por alguns minutos, mexendo, e deixe esfriar. Guarde na geladeira.']),
+R('rg22','Korokke vegano','Comidas','🥔',50,10,'unidades','vegan',['2 colheres de sopa de azeite','1/2 cebola picadinha','2 dentes de alho','1 xícara de carne de soja hidratada','1 colher de sopa de shoyu','2 batatas cozidas','5 colheres de sopa de farinha de rosca','1/2 xícara de farinha de trigo','1/2 xícara de água','1 xícara de farinha panko'],['Refogue a cebola e o alho no azeite, junte a carne de soja bem espremida e o shoyu e doure por alguns minutos.','Amasse as batatas e misture com a carne de soja e a farinha de rosca. Modele croquetes ovais.','Misture a farinha de trigo com a água, passe os croquetes nessa pasta e depois no panko.','Frite em óleo quente até dourar ou pincele com azeite e asse na air fryer a 200 °C por 12 minutos.']),
+R('rg23','Couve-flor crocante com gochujang','Comidas','🥦',45,3,'porções','vegan',['3/4 xícara de farinha de trigo','3/4 xícara de leite vegetal','1 colher de sopa de amido de milho','1 colher de chá de páprica defumada','1 colher de chá de pimenta em flocos','1 couve-flor média','2 colheres de sopa de gochujang','2 colheres de sopa de melado','3 colheres de sopa de manteiga vegana','300 g de óleo para fritar'],['Misture a farinha, o leite vegetal, o amido, a páprica e a pimenta até formar uma massa lisa.','Passe os floretes de couve-flor na massa e frite em óleo não muito quente até dourar, para ficar crocante por fora e macia por dentro.','Derreta o gochujang com o melado e a manteiga em fogo baixo, desligue e misture os floretes fritos.','Deixe esfriar um pouco para a casquinha ficar brilhante e crocante.']),
+R('rg24','Nuggets vegano de feijão','Comidas','🍗',40,15,'unidades','vegan',['1/2 xícara de feijão carioca cozido','1 xícara de proteína de soja clara','1/2 colher de chá de sal','1/4 colher de chá de cebola em pó','1/4 colher de chá de alho em pó','1/4 colher de chá de páprica doce','1/8 colher de chá de pimenta caiena','2 colheres de sopa de levedura nutricional','1/2 xícara de farinha de arroz','1 colher de sopa de farinha de linhaça dourada','1 colher de sopa de azeite','1/2 xícara de farinha de trigo','1/2 xícara de água','1 xícara de farinha panko'],['Hidrate a proteína de soja e esprema bem para tirar o excesso de água.','Amasse o feijão e junte a soja, os temperos, a levedura, a farinha de arroz, a linhaça e o azeite. Sove de leve e, se estiver seco, junte 1 colher de sopa de água.','Modele os nuggets, passe na mistura de farinha de trigo com água e depois no panko.','Pincele com bastante azeite e asse na air fryer a 200 °C por 12 a 15 minutos, até dourar.']),
+R('rg25','Daifukumochi de maracujá','Doces','🍡',60,8,'unidades','vegan',['112 g de farinha de arroz glutinoso','6 colheres de sopa de amido de milho','2 colheres de sopa de açúcar','200 ml de leite vegetal','2 colheres de sopa de manteiga vegana','200 g de polpa de maracujá','1/4 xícara de açúcar cristal','2 fatias de gengibre','1 pitada de sal'],['Misture a farinha de arroz glutinoso, o amido, o açúcar, o leite vegetal e a manteiga em uma tigela e cubra com filme plástico furado com um palito.','Leve ao micro-ondas por 1 minuto e 30 segundos, mexa bem, cubra de novo e cozinhe mais 1 minuto e 30 segundos. Sove com cuidado, pois estará quente, e deixe esfriar.','Ferva o maracujá com o açúcar cristal, o gengibre e o sal por alguns minutos, até engrossar, e deixe esfriar por completo.','Divida a massa em 8 partes, abra com amido de milho para não grudar, recheie com a geleia e feche bem. Leve à geladeira.']),
+R('rg26','Carne vegana de soja refogada','Comidas','🍲',30,4,'porções','vegan',['1 1/2 xícara de proteína de soja texturizada média','1 cebola','1 tomate','1/2 pimentão vermelho','5 dentes de alho','3 colheres de sopa de passata de tomate','2 colheres de sopa de shoyu','5 g de páprica defumada','sal e pimenta a gosto'],['Hidrate a proteína de soja em água quente por 15 minutos, escorra e esprema bem.','Doure a soja em um fio de azeite com o alho e junte a cebola, o tomate e o pimentão picados.','Acrescente a passata, o shoyu e a páprica e cozinhe por 10 minutos, ajustando o sal e a pimenta.']),
+R('rg27','Salada de uva-verde','Comidas','🍇',20,2,'porções','vegan',['300 g de uva verde','10 g de cebolinha','5 g de gergelim torrado','15 g de azeite','1 g de pimenta-do-reino','2 g de sal'],['Corte as uvas ao meio.','Misture com a cebolinha picada, o gergelim, o azeite, a pimenta e o sal.','Sirva gelada.']),
+R('rv21','Pipoca gourmet','Doces','🍿',25,6,'porções','veg',['150 g de pipoca estourada','395 g de leite condensado','15 g de manteiga','40 g de leite em pó'],['Cozinhe o leite condensado com a manteiga em fogo baixo, mexendo, por 5 minutos, até engrossar levemente.','Misture o leite em pó e desligue o fogo.','Despeje sobre a pipoca e misture com cuidado até cobrir tudo.','Espalhe em uma assadeira e deixe secar por 20 minutos.']),
+R('rv22','Torta de cookie com recheio de creme de avelã','Doces','🍪',60,10,'fatias','veg',['150 g de manteiga','100 g de açúcar mascavo','100 g de açúcar','1 ovo','250 g de farinha de trigo','5 g de fermento em pó','100 g de gotas de chocolate','250 g de creme de avelã'],['Bata a manteiga amolecida com os dois açúcares e o ovo.','Junte a farinha e o fermento e depois as gotas de chocolate, formando uma massa de cookie.','Forre uma forma com metade da massa, espalhe o creme de avelã e cubra com o restante da massa.','Asse a 180 °C por 30 a 35 minutos e deixe esfriar antes de cortar.']),
+R('rv23','S’mores de forno','Doces','🍫',25,6,'porções','veg',['200 g de biscoito maisena','200 g de chocolate ao leite','150 g de marshmallow'],['Forre o fundo de um refratário com metade dos biscoitos quebrados.','Cubra com o chocolate em pedaços e o marshmallow.','Asse a 200 °C por 8 a 10 minutos, até o marshmallow dourar.','Sirva quente, com o restante dos biscoitos para pegar o creme.']),
+R('rv24','Salada de pepino com cream cheese','Comidas','🥒',10,2,'porções','veg',['400 g de pepino','150 g de cream cheese','10 g de cebolinha','15 g de suco de limão','2 g de sal','1 g de pimenta-do-reino'],['Corte os pepinos em rodelas finas e deixe com uma pitada de sal por 5 minutos. Escorra a água.','Misture o cream cheese com a cebolinha, o limão e a pimenta.','Junte o pepino e sirva gelado.']),
+R('rv25','Omelete de cenoura e abobrinha recheada','Comidas','🍳',15,1,'porções','veg',['3 ovos','50 g de cenoura ralada','50 g de abobrinha ralada','40 g de queijo muçarela','5 g de azeite','1 pitada de sal'],['Misture os ovos, a cenoura, a abobrinha e o sal.','Aqueça o azeite em uma frigideira antiaderente e despeje a mistura.','Quando firmar, coloque a muçarela em uma metade, dobre e deixe derreter.']),
+R('rv26','Panquequinha de abobrinha na air fryer','Comidas','🥒',25,4,'porções','veg',['300 g de abobrinha ralada','2 ovos','60 g de farinha de trigo','40 g de queijo parmesão ralado','5 g de fermento em pó','3 g de sal'],['Esprema a abobrinha para tirar o excesso de água.','Misture com os ovos, a farinha, o parmesão, o fermento e o sal.','Coloque porções da massa no cesto da air fryer forrado e asse a 180 °C por 12 a 15 minutos, virando na metade.']),
+R('rc21','Salada Caesar com frango empanado','Comidas','🥗',40,3,'porções','carne',['400 g de filé de peito de frango','1 ovo','60 g de farinha de rosca','1 alface-americana','40 g de queijo parmesão ralado','40 g de maionese','10 g de mostarda','15 g de suco de limão','1 dente de alho','30 g de croutons'],['Corte o frango em tiras, tempere, passe no ovo batido e na farinha de rosca e asse na air fryer a 200 °C por 12 minutos.','Misture a maionese, a mostarda, o limão, o alho amassado e metade do parmesão para fazer o molho.','Monte com a alface rasgada, o frango, os croutons, o molho e o restante do parmesão.']),
+R('rc22','Rigatoni com bacon e espinafre','Comidas','🍝',25,3,'porções','carne',['300 g de macarrão rigatoni','150 g de bacon em cubos','200 g de molho de tomate','100 g de espinafre','2 dentes de alho','30 g de queijo parmesão ralado','10 g de cebolinha'],['Cozinhe o macarrão em água com sal até ficar al dente.','Frite o bacon até dourar e refogue o alho.','Junte o molho de tomate e o espinafre até murchar.','Misture o macarrão ao molho e finalize com o parmesão e a cebolinha.'])
+];
+const $=s=>document.querySelector(s);
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+let favs=[],custom=[],gone=[],edits={};
+try{const g=k=>{const x=JSON.parse(localStorage.getItem(k)||'[]');return Array.isArray(x)?x:[]};favs=g('panela-favs');custom=g('panela-custom');gone=g('panela-gone');const ed=JSON.parse(localStorage.getItem('panela-edits')||'{}');if(ed&&typeof ed==='object'&&!Array.isArray(ed))edits=ed}catch(e){}
+const persist=()=>{try{localStorage.setItem('panela-favs',JSON.stringify(favs));localStorage.setItem('panela-custom',JSON.stringify(custom));localStorage.setItem('panela-gone',JSON.stringify(gone));localStorage.setItem('panela-edits',JSON.stringify(edits))}catch(e){}};
+const S={gm:{},tab:'home',q:'',cat:'',dt:'',ph:'',open:null,edit:null,f:1,done:{}};
+const norm=r=>({...r,d:r.d||'veg',c:CATS.includes(r.c)?r.c:(OLD[r.c]||'Comidas')});
+try{S.gm=JSON.parse(localStorage.getItem('panela-gm')||'{}')||{}}catch(e){}
+const all=()=>BASE.map(r=>edits[r.id]||r).concat(custom).filter(r=>!gone.includes(r.id)).map(norm);
+const find=id=>all().find(r=>r.id===id);
+const imgOf=id=>{try{return localStorage.getItem('panela-img-'+id)||''}catch(e){return ''}};
+const setImg=(id,d)=>{try{d?localStorage.setItem('panela-img-'+id,d):localStorage.removeItem('panela-img-'+id);return true}catch(e){return false}};
+const phv=d=>d?'<img src="'+d+'" alt="">':'📷';
+const tl=r=>{const d=imgOf(r.id);return d?'<img src="'+d+'" alt="">':r.e};
+function shrink(file,cb){
+  const fr=new FileReader();
+  fr.onload=()=>{const im=new Image();im.onload=()=>{const k=Math.min(1,900/Math.max(im.width,im.height)),c=document.createElement('canvas');c.width=Math.round(im.width*k);c.height=Math.round(im.height*k);c.getContext('2d').drawImage(im,0,0,c.width,c.height);cb(c.toDataURL('image/jpeg',.72))};im.onerror=()=>cb('');im.src=fr.result};
+  fr.onerror=()=>cb('');fr.readAsDataURL(file);
+}
+function parse(s){
+  const m=s.trim().match(/^(\d+\s+\d\/\d|\d+\/\d+|\d+(?:[.,]\d+)?|[½¼¾])\s*(.*)$/);
+  if(!m)return[0,'',s.trim()];
+  const t=m[1].replace(',','.');
+  const q=t==='½'?.5:t==='¼'?.25:t==='¾'?.75:t.split(/\s+/).reduce((a,x)=>a+(x.includes('/')?x.split('/')[0]/x.split('/')[1]:+x),0);
+  let r=m[2],u='';
+  const k=r.match(/^(xícaras?|xíc\.?|xic|colheres?\s+de\s+sopa|colheres?\s+de\s+chá|col\.?\s*sopa|col\.?\s*chá|kg|g|ml|l|pitadas?)(?=\s|$)\s*(?:de\s+)?/i);
+  if(k){const w=k[1].toLowerCase();u=/^x/.test(w)?'xíc.':/sopa/.test(w)?'col. sopa':/chá/.test(w)?'col. chá':w.startsWith('pitada')?'pitada':w;r=r.slice(k[0].length)}
+  return[q,u,r];
+}
+const fq=v=>{if(v>=10)return String(Math.round(v));const r=Math.round(v*4)/4||.25,w=Math.floor(r);return((w||'')+' '+['','¼','½','¾'][Math.round((r-w)*4)]).trim()};
+const flex=(n,pl)=>{let on=true;return n.split(' ').map(w=>{if(/^(de|do|da|em|para|com|sem|ao|e)$/.test(w))on=false;if(!on)return w;return pl?(/ão$/.test(w)?w.slice(0,-2)+'ões':/[aeiouã]$/.test(w)?w+'s':w):(/ões$/.test(w)?w.slice(0,-3)+'ão':/s$/.test(w)&&w.length>3?w.slice(0,-1):w)}).join(' ')};
+const UN={'xíc.':['xícara','xícaras'],'col. sopa':['colher de sopa','colheres de sopa'],'col. chá':['colher de chá','colheres de chá']};
+const PK=[[/^leite condensado/,395,'lata','latas'],[/^creme de leite/,200,'caixinha','caixinhas']];
+const CV=[[/^leite condensado/,310,20],[/^creme de leite/,240,15],[/cream cheese/,230,15],[/^leite em po/,130,10],[/^leite de coco/,240,15],[/^leite de aveia/,240,15],[/^leite vegetal/,240,15],[/^leite/,245,15],[/manteiga/,220,15],[/acucar de confeiteiro/,120,10],[/acucar/,200,13],[/eritritol/,190,12],[/^melado/,330,20],[/^mel$/,340,21],[/farinha de trigo/,120,8],[/farinha de aveia/,90,7],[/farinha de rosca/,110,7],[/farinha de grao/,100,7],[/farinha de arroz glutinoso/,100,6],[/farinha de arroz/,140,9],[/farinha de linhaca/,110,7],[/farinha de mandioca/,160,10],[/amido de milho/,130,8],[/^fuba/,130,8],[/goma de tapioca/,140,9],[/^aveia/,90,9],[/cacau/,100,7],[/chocolate em po/,100,8],[/whey/,100,6],[/fermento/,240,12],[/oleo/,215,13],[/azeite/,215,13],[/^agua/,240,15],[/caldo/,240,15],[/suco de limao/,245,15],[/suco de laranja/,245,15],[/polpa de maracuja/,250,16],[/vinagre/,240,15],[/molho de soja|molho shoyu|^shoyu/,255,17],[/ketchup/,280,17],[/mostarda/,270,17],[/maionese/,240,16],[/molho de tomate|passata/,250,16],[/pesto/,240,15],[/iogurte/,240,15],[/cottage/,220,14],[/ricota/,250,16],[/queijo parmesao/,90,6],[/mucarela ralada|queijo mucarela/,110,7],[/cheddar/,110,7],[/queijo feta/,150,9],[/pasta de amendoim/,260,16],[/^chia/,170,12],[/coco ralado/,80,5],[/gotas de chocolate/,170,11],[/castanha/,140,9],[/levedura/,240,5],[/paprica/,240,7],[/cominho/,240,7],[/canela/,240,8],[/curry/,240,7],[/alho em po|cebola em po/,240,8],[/oregano/,240,3],[/^sal( |$)/,288,18],[/cafe soluvel/,240,5],[/cafe moido/,240,7],[/^cafe|agua de coco/,240,15],[/^gelo/,150,9],[/tomate-cereja/,150,10],[/^morango/,150,10],[/cenoura ralada/,110,7],[/^milho/,160,10],[/^ervilha/,160,10],[/^feijao/,200,13],[/grao-de-bico/,165,11],[/arroz cozido/,160,10],[/batata palha/,30,2],[/cebolinha|salsinha|coentro|hortela/,50,3],[/gergelim/,150,9],[/gluten/,130,8],[/trigo para quibe/,160,10],[/amendoim torrado/,150,10],[/espinafre/,40,3],[/proteina de soja/,85,6],[/croutons/,35,3],[/biscoito maisena/,100,7]];
+const nz=t=>t.normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase();
+const cvf=n=>{const m=nz(n);return CV.find(x=>x[0].test(m))};
+const rf=v=>{const w=Math.floor(v),fr=v-w,b=[0,.25,1/3,.5,2/3,.75,1].reduce((a,x)=>Math.abs(x-fr)<Math.abs(a-fr)?x:a);return Math.max(.25,w+b)};
+const rs=v=>Math.max(.25,v<2?Math.round(v*4)/4:v<6?Math.round(v*2)/2:Math.round(v));
+const fs=r=>{const w=Math.floor(r+1e-6),fr=r-w,k=[[0,''],[.25,'¼'],[1/3,'⅓'],[.5,'½'],[2/3,'⅔'],[.75,'¾']].reduce((a,b)=>Math.abs(b[0]-fr)<Math.abs(a[0]-fr)?b:a);return((w||'')+' '+k[1]).trim()||'0'};
+const fmt=(r,u,n)=>fs(r)+' '+UN[u][r>1?1:0]+' de '+n;
+function home(g,n){
+  const m=nz(n),pk=PK.find(x=>x[0].test(m));
+  if(pk){const k=g/pk[1];if(k>=.45&&Math.abs(k*2-Math.round(k*2))<.15){const r=Math.round(k*2)/2;return fs(r)+' '+(r>1?pk[3]:pk[2])+' de '+n}}
+  const c=cvf(n);if(!c)return null;
+  if(g>=.45*c[1])return fmt(rf(g/c[1]),'xíc.',n);
+  if(g>=.9*c[2])return fmt(rs(g/c[2]),'col. sopa',n);
+  const t=c[2]/3;if(g>=.6*t)return fmt(rs(g/t),'col. chá',n);
+  return '1 pitada de '+n;
+}
+function line([q,u,n],f,gm){
+  if(!q)return esc(n);
+  let v=q*f;
+  const c=cvf(n);
+  if(gm&&c&&UN[u]){v=u==='xíc.'?v*c[1]:u==='col. sopa'?v*c[2]:v*c[2]/3;u='g'}
+  if(!gm&&(u==='g'||u==='ml')){const h=home(v,n);if(h)return esc(h)}
+  if(UN[u]){
+    if(u==='xíc.'&&v<.25){v*=16;u='col. sopa'}
+    if(u==='col. sopa'&&v<1){v*=3;u='col. chá'}
+    return esc(fmt(u==='xíc.'?rf(v):rs(v),u,n));
+  }
+  if(!u&&(q>1)!==(v>1))n=flex(n,v>1);
+  if(u==='pitada'&&v>1)u='pitadas';
+  const x=u==='g'||u==='ml'?(v>=10?''+Math.round(v):(''+(Math.round(v*2)/2||.5)).replace('.',',')):fq(v);
+  return x+(u?' '+u+' de ':' ')+esc(n);
+}
+const card=r=>{const fv=favs.includes(r.id);return `<div class="card"><button class="main" data-act="open" data-id="${r.id}"><span class="tile">${tl(r)}</span><span class="info"><b>${esc(r.t)}</b><small>${esc(r.c)}, ${r.m} min</small></span></button><button class="heart${fv?' on':''}" data-act="fav" data-id="${r.id}" aria-pressed="${fv}" aria-label="Favoritar ${esc(r.t)}">${fv?'♥':'♡'}</button></div>`};
+function list(){
+  const q=S.q.trim().toLowerCase(),fav=S.tab==='fav';
+  const rs=all().filter(r=>(!fav||favs.includes(r.id))&&(fav||!S.cat||r.c===S.cat)&&(fav||!S.dt||r.d===S.dt)&&(!q||(r.t+' '+r.i.join(' ')).toLowerCase().includes(q)));
+  $('#list').innerHTML=rs.length?DIETS.map(([k,l])=>{const g=rs.filter(r=>r.d===k);return g.length?'<h3 class="sec">'+l+' <small>'+g.length+'</small></h3>'+g.map(card).join(''):''}).join(''):`<p class="empty">${fav?'Toque no coração de uma receita para guardá-la aqui.':'Nenhuma receita encontrada. Tente outro nome ou ingrediente.'}</p>`;
+}
+function body(r){
+  const gm=!!S.gm[r.id],mug=!!r.mug&&S.f===MUG,sc=r.i.some(x=>parse(x)[0]),p=mug?(r.mug.p||GEN):r.p;
+  const chips=FS.concat(r.mug?[[MUG,'Bolo de caneca']]:[]).map(([f,l])=>`<button class="chip${S.f===f?' on':''}" data-act="f" data-f="${f}">${l}</button>`).join('');
+  return `<div class="tags"><span class="tag">${esc(DL[r.d]||'')}</span><span class="tag">${esc(r.c)}</span><span class="tag">${mug?(r.mug.m||5)+' min':S.f===1?r.m+' min':'cerca de '+Math.max(5,Math.round(r.m*(TM[S.f]||1)/5)*5)+' min'}</span></div>
+${sc?`<h3>Quanto fazer?</h3><div class="chips">${chips}</div>`:''}
+<p class="yield">Rende ${mug?'1 caneca':fq(r.s*S.f)+' '+esc(r.su)}</p>
+${mug?'<p class="note">A caneca usa ⅛ da receita. As medidas pequenas são aproximadas: se der meio ovo, bata o ovo e use metade. Confira o ponto e ajuste ao seu gosto.</p>':''}
+${!mug&&S.f!==1?'<p class="note">Tempo estimado para essa quantidade. Os tempos citados nos passos são os da receita inteira, então confira o ponto antes de tirar do forno ou do fogo.</p>':''}
+<h3>Ingredientes</h3><div class="seg" role="group" aria-label="Unidade das medidas"><button data-act="gm" data-m="0" class="${gm?'':'on'}">Colher e xícara</button><button data-act="gm" data-m="1" class="${gm?'on':''}">Gramas</button></div>${r.i.map((s,k)=>{const key=r.id+':'+k,d=S.done[key];return `<label class="chk${d?' done':''}"><input type="checkbox" data-k="${key}"${d?' checked':''}><span>${line(parse(s),S.f,gm)}</span></label>`}).join('')}
+<h3>Modo de preparo</h3><ol class="steps">${p.map(s=>`<li><span>${esc(s)}</span></li>`).join('')}</ol>`;
+}
+function detail(r){
+  const fv=favs.includes(r.id);
+  return `<header class="top"><button class="back" data-act="back">‹ Voltar</button><button class="heart${fv?' on':''}" data-act="fav" data-id="${r.id}" aria-pressed="${fv}" aria-label="Favoritar">${fv?'♥':'♡'}</button></header>
+<div class="tile big">${tl(r)}</div><h2>${esc(r.t)}</h2><div id="scal">${body(r)}</div>
+${r.tip?`<h3>Dicas</h3><p>${esc(r.tip)}</p>`:''}
+
+<div class="acts"><button class="ghost" data-act="edit" data-id="${r.id}">Editar receita</button><button class="danger" data-act="del" data-id="${r.id}">Excluir receita</button></div>`;
+}
+const form=r=>`<header class="top"><h1>${r?'Editar receita':'Nova receita'}</h1></header><div class="form">
+<div class="phrow"><div id="ph" class="tile big">${phv(S.ph)}</div><label class="ghost filebtn">Tirar foto ou escolher da galeria<input id="f-ph" class="vh" type="file" accept="image/*"></label><button class="ghost" data-act="rmph">Remover foto</button></div>
+<label>Nome<input id="f-t" autocomplete="off" value="${r?esc(r.t):''}"></label>
+<label>Seção<select id="f-x">${DIETS.map(([k,l])=>`<option value="${k}"${(r?r.d:'veg')===k?' selected':''}>${l}</option>`).join('')}</select></label>
+<div class="row"><label>Categoria<select id="f-c">${CATS.map(c=>`<option${r&&r.c===c?' selected':''}>${c}</option>`).join('')}</select></label><label>Emoji<input id="f-e" maxlength="4" placeholder="🍰" value="${r?esc(r.e):''}"></label></div>
+<div class="row"><label>Tempo (min)<input id="f-m" type="number" min="1" inputmode="numeric" value="${r?r.m:30}"></label><label>Rende${r?' ('+esc(r.su)+')':''}<input id="f-s" type="number" min="1" inputmode="numeric" value="${r?r.s:4}"></label></div>
+<label>Ingredientes<small>Um por linha, com a quantidade em gramas na frente (ex.: 200 g de farinha). Assim dá para ajustar as porções.</small><textarea id="f-i" rows="6" placeholder="200 g de farinha&#10;3 ovos&#10;sal a gosto">${r?esc(r.i.join('\n')):''}</textarea></label>
+<label>Modo de preparo<small>Um passo por linha</small><textarea id="f-p" rows="6">${r?esc(r.p.join('\n')):''}</textarea></label>
+<label>Dicas<small>Opcional</small><textarea id="f-d" rows="3">${r&&r.tip?esc(r.tip):''}</textarea></label>
+<label class="ck"><input id="f-g" type="checkbox"${r&&r.mug?' checked':''}>Permitir versão bolo de caneca (⅛ da receita)</label>
+<p class="err" id="err" role="alert"></p><button class="primary" data-act="save">Salvar receita</button><button class="ghost" data-act="cancel">Cancelar</button></div>`;
+function render(){
+  const a=$('#app'),fav=S.tab==='fav';
+  document.querySelectorAll('.tabs button').forEach(b=>b.classList.toggle('on',b.dataset.tab===S.tab&&!S.edit));
+  window.scrollTo(0,0);
+  if(S.open){a.innerHTML=detail(find(S.open));return}
+  if(S.tab==='new'){S.ph=S.edit?imgOf(S.edit):'';a.innerHTML=form(S.edit?find(S.edit):null);return}
+  a.innerHTML=`<header class="top">${fav?'<h1>Favoritas</h1>':BRAND+'<input id="q" type="search" placeholder="Buscar receita ou ingrediente" aria-label="Buscar receita" value="'+esc(S.q)+'">'}</header>`+(fav?'':`<p class="lbl">Seção</p><div class="chips">${[['','Todas'],...DIETS].map(([k,l])=>`<button class="chip${S.dt===k?' on':''}" data-act="dt" data-v="${k}">${l}</button>`).join('')}</div><p class="lbl">Tipo</p><div class="chips">${['',...CATS].map(c=>`<button class="chip${S.cat===c?' on':''}" data-act="cat" data-v="${c}">${c||'Todas'}</button>`).join('')}</div>`)+'<p class="hint">Segure o dedo em uma receita para editar ou excluir.</p><div id="list"></div>';
+  list();
+}
+const v=id=>document.getElementById(id).value;
+let undo=null,tt=0,lt=0,lp=false,sx=0,sy=0;
+function toast(msg){const t=$('#toast');t.innerHTML=`<span>${esc(msg)}</span><button data-act="undo">Desfazer</button>`;t.hidden=false;clearTimeout(tt);tt=setTimeout(()=>{t.hidden=true;if(undo&&undo.ci>=0)setImg(undo.id,'');undo=null},6000)}
+function del(id){
+  const r=find(id);if(!r)return;
+  const ci=custom.findIndex(x=>x.id===id);
+  if(ci>=0)custom.splice(ci,1);else gone.push(id);
+  undo={id,r,ci,fav:favs.includes(id)};
+  favs=favs.filter(x=>x!==id);persist();S.open=null;render();toast('“'+r.t+'” foi excluída');
+}
+function sheet(id){
+  const r=find(id);if(!r)return;closeSheet();
+  try{navigator.vibrate&&navigator.vibrate(15)}catch(e){}
+  const d=document.createElement('div');d.id='ov';d.className='ov';
+  d.innerHTML=`<div class="sheet" role="dialog" aria-modal="true" aria-label="Opções da receita"><p class="st">${esc(r.t)}</p><button data-act="sedit" data-id="${id}">Editar receita</button><button class="bad" data-act="sdel" data-id="${id}">Excluir receita</button><button data-act="close">Cancelar</button></div>`;
+  document.body.appendChild(d);d.querySelector('button').focus();
+}
+const closeSheet=()=>{const o=$('#ov');if(o)o.remove()};
+document.addEventListener('pointerdown',e=>{const c=e.target.closest('.main');lp=false;clearTimeout(lt);if(!c)return;sx=e.clientX;sy=e.clientY;lt=setTimeout(()=>{lp=true;sheet(c.dataset.id)},500)});
+['pointerup','pointercancel'].forEach(t=>document.addEventListener(t,()=>clearTimeout(lt)));
+document.addEventListener('pointermove',e=>{if(lt&&Math.hypot(e.clientX-sx,e.clientY-sy)>10)clearTimeout(lt)});
+document.addEventListener('contextmenu',e=>{const c=e.target.closest('.main');if(c){e.preventDefault();if(!lp){lp=true;sheet(c.dataset.id)}}});
+document.addEventListener('keydown',e=>{lp=false;if(e.key==='Escape')closeSheet()});
+document.addEventListener('click',e=>{
+  if(e.target.id==='ov'){closeSheet();return}
+  const b=e.target.closest('[data-act],[data-tab]');if(!b)return;
+  const a=b.dataset.act,id=b.dataset.id;
+  if(lp&&a==='open')return;
+  if(b.dataset.tab){S.tab=b.dataset.tab;S.open=null;S.edit=null;render();return}
+  if(a==='open'){S.open=id;S.f=1;render()}
+  else if(a==='back'){S.open=null;render()}
+  else if(a==='cat'){S.cat=b.dataset.v;render()}
+  else if(a==='dt'){S.dt=b.dataset.v;render()}
+  else if(a==='gm'){S.gm[S.open]=b.dataset.m==='1';try{localStorage.setItem('panela-gm',JSON.stringify(S.gm))}catch(e){}$('#scal').innerHTML=body(find(S.open))}
+  else if(a==='f'){S.f=+b.dataset.f;$('#scal').innerHTML=body(find(S.open))}
+  else if(a==='fav'){const k=favs.indexOf(id);k<0?favs.push(id):favs.splice(k,1);persist();if(S.open){const on=k<0;b.classList.toggle('on',on);b.textContent=on?'♥':'♡';b.setAttribute('aria-pressed',on)}else list()}
+  else if(a==='edit'||a==='sedit'){closeSheet();S.edit=id;S.tab='new';S.open=null;render()}
+  else if(a==='del'||a==='sdel'){closeSheet();del(id)}
+  else if(a==='close')closeSheet();
+  else if(a==='undo'&&undo){const u=undo;if(u.ci>=0)custom.splice(u.ci,0,u.r);else gone=gone.filter(x=>x!==u.id);if(u.fav)favs.push(u.id);undo=null;persist();$('#toast').hidden=true;render()}
+  else if(a==='rmph'){S.ph='';$('#ph').innerHTML=phv('')}
+  else if(a==='cancel'){S.tab='home';if(S.edit)S.open=S.edit;S.edit=null;render()}
+  else if(a==='save'){
+    const t=v('f-t').trim(),i=v('f-i').split('\n').map(s=>s.trim()).filter(Boolean),p=v('f-p').split('\n').map(s=>s.trim()).filter(Boolean);
+    if(!t||!i.length||!p.length){$('#err').textContent=!t?'Dê um nome à receita.':!i.length?'Adicione ao menos um ingrediente.':'Adicione ao menos um passo.';return}
+    const old=S.edit?find(S.edit):null,c=v('f-c');
+    const r={id:old?old.id:'u'+Date.now(),t,c,e:Array.from(v('f-e').trim())[0]||EM[c],m:+v('f-m')||30,s:+v('f-s')||4,su:old?old.su:'porções',i,p,d:v('f-x')};
+    const tip=v('f-d').trim();if(tip)r.tip=tip;
+    if(!setImg(r.id,S.ph)){$('#err').textContent='Não há espaço para guardar essa foto. Tente uma foto menor ou remova outras fotos.';return}
+    
+    if($('#f-g').checked)r.mug=old&&old.mug?old.mug:{};
+    if(!old)custom.push(r);else if(custom.some(x=>x.id===old.id))custom=custom.map(x=>x.id===old.id?r:x);else edits[old.id]=r;
+    persist();S.tab='home';S.edit=null;S.open=r.id;S.f=1;render();
+  }
+});
+document.addEventListener('input',e=>{if(e.target.id==='q'){S.q=e.target.value;list()}});
+document.addEventListener('change',e=>{
+  if(e.target.id==='f-ph'){const f=e.target.files&&e.target.files[0];if(f)shrink(f,d=>{if(d){S.ph=d;$('#ph').innerHTML=phv(d)}else $('#err').textContent='Não consegui abrir essa foto. Tente outra.'});e.target.value='';return}
+ if(e.target.matches('.chk input')){S.done[e.target.dataset.k]=e.target.checked;e.target.closest('label').classList.toggle('done',e.target.checked)}});
+render();
+</script>
+</body>
+</html>
